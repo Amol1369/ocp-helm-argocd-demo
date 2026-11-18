@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+
+kind: Application
+
+metadata:
+  name: nginx-demo
+
+  namespace: openshift-gitops
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/Amol1369/ocp-helm-argocd-demo.git
+
+    targetRevision: main
+
+    path: nginx-chart
+
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+
+    namespace: helm-argocd-demo
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
